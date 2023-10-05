@@ -6,6 +6,11 @@ const dotenv=require("dotenv").config()
 const mongoose=require("mongoose")
 const app=express()
 
+//connect to the database
+mongoose.connect(process.env.DATABASE_URL)
+.then(()=>console.log("Database connected"))
+.catch(error=>console.log(error))
+
 //import
 const authRoute=require("./router/auth")
 
