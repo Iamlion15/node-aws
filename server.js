@@ -9,6 +9,14 @@ const app=express()
 //import
 const authRoute=require("./router/auth")
 
+
+//app middlewares
+
+app.use(morgan('dev'));
+app.use(bodyparser.json());
+app.use(cors({origin:process.env.CLIENT_URL}))
+
+
 //middleware
 app.use("/api",authRoute)
 
