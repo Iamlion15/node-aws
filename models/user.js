@@ -49,7 +49,7 @@ userSchema.virtual('password')
     //encrypt password
     this.hashed_password=this.encryptPassword(password)
 })
-.get(function(password){
+.get(function(){
     return this._password;
 })
 
@@ -58,12 +58,12 @@ userSchema.virtual('password')
 
 userSchema.methods={
     authenticate:function(plainText){
-        return this.encryptPassword(plainText) == this.hashed_password;
+        return this.encryptPassword(plainText) === this.hashed_password;
     },
     encryptPassword:function(password){
         if(!password) return ""
         try {
-            return crypto.createHmac("256",this.salt)
+            return crypto.createHmac("sha256",this.salt)
             .update(password)
             .digest("hex")
         } catch (error) {
