@@ -12,7 +12,7 @@ exports.registerEmailParams=(email,token)=>{
                     Data: `<html>
                     <h1>Verify your email address</h1>
                     <p>please use this link to confirm</p>
-                    <p>${process.env.CLIENT_URL}/auth/token/activate/${token}</p>
+                    <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
                     </html>`
                 }
             },
