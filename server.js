@@ -13,6 +13,7 @@ mongoose.connect(process.env.DATABASE_URL)
 
 //import
 const authRoute=require("./router/auth")
+const userRoute=require("./router/user")
 
 
 //app middlewares
@@ -24,6 +25,7 @@ app.use(cors({origin:process.env.CLIENT_URL}))
 
 //middleware
 app.use("/api",authRoute)
+app.use("/api",userRoute)
 
 const PORT =process.env.PORT || 5000
 app.listen(PORT,()=>{

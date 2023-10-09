@@ -2,6 +2,7 @@ const User = require("../models/user")
 const AWS = require("aws-sdk")
 const jwt = require("jsonwebtoken")
 const { registerEmailParams } = require("../helpers/email");
+const expressJwt= require('express-jwt');
 const shortid = require("shortid")
 
 AWS.config.update({
@@ -106,3 +107,38 @@ exports.login = async (req, res) => {
     return res.status(500).json({ error: "Server error" });
   }
 };
+
+
+exports.requireSignIn = expressJwt({ secret: process.env.JWT_SECRET,algorithms:['HS256', 'RS256'] });
+
+exports.authMiddleware=async(req,res,next)=>{
+    const authUserId=req.user._id;
+    const findUser=await User.findOne({_id:authUserId})
+    if (findUser===null){
+        res.status(400).json({
+            error:"user not found"
+        })
+    }
+    else{
+        req.profile=findUser
+        next();
+    }
+}
+
+exports.AdminMiddleware=async(req,res,next)=>{
+    const authUserId=req.user._id;
+    const findUser=await User.findOne({_id:authUserId})
+    if (findUser===null){
+        return res.status(400).json({
+            error:"user not found"
+        })
+    }
+    if(findUser.role !== "admin")
+    {
+        return res.status(400).json({
+            error:"access denied"
+        })
+    }
+        req.profile=findUser
+        next();
+}
